@@ -7,8 +7,28 @@ status: "active"
 featured: true
 ---
 
-findlab-gitops is the GitOps repository that declares the entire state of my homelab Kubernetes cluster. The cluster runs on a single Talos OS node and uses ArgoCD's app-of-apps pattern to manage every workload from a single root Helm chart. Push to `main` and ArgoCD picks up the change within minutes. No `kubectl apply` allowed.
+The GitOps repository that declares the entire state of my homelab Kubernetes cluster. A single Talos OS node runs every workload, managed through ArgoCD's app-of-apps pattern. One root Helm chart generates all child Application CRs. Push to `main` and ArgoCD picks up the change within minutes. No `kubectl apply` allowed.
 
-The cluster hosts a private Docker registry with htpasswd auth, a MongoDB instance via the community operator, a Discord bot backed by Postgres and Redis, an Enshrouded game server, and this website. Infrastructure services include cert-manager for automated Let's Encrypt TLS (DNS-01 via Cloudflare), Sealed Secrets for encrypting secrets at rest in Git, Reflector for mirroring TLS certs across namespaces, and a Cloudflare Tunnel for exposing services to the internet without any public IP or port forwarding.
+The cluster hosts a private Docker registry, a MongoDB instance, a Discord bot, an Enshrouded game server, and this website. All of it defined in YAML, all of it version-controlled.
 
-All persistent data lives on local-path volumes backed up nightly to a USB drive via a privileged CronJob. The backup system uses hardlink-based snapshots with 30-day retention and exits gracefully if the drive is disconnected. Secrets never touch Git in plaintext. Every secret goes through `kubeseal` with cluster-wide scope before it enters the repo.
+## Features
+
+- **App-of-apps pattern**: A single root Helm chart in `root-app/` templates out every ArgoCD Application CR. Adding a new service means adding one template file and a `workloads/` directory.
+- **Zero-trust internet exposure**: A Cloudflare Tunnel provides inbound access without any public IP or port forwarding. The `cloudflared` pod makes outbound-only connections to Cloudflare's edge.
+- **Automated TLS**: cert-manager issues Let's Encrypt certificates via DNS-01 challenges against the Cloudflare API. Reflector mirrors TLS secrets across namespaces so each workload gets its cert without duplication.
+- **GitOps-safe secrets**: Every secret is sealed with `kubeseal --scope cluster-wide` before entering the repo. Plaintext never touches Git.
+- **Nightly PV backups**: A privileged CronJob detects the USB backup drive by stable device ID, mounts it, and rsyncs all persistent volumes with hardlink-based snapshots. 30-day retention. Gracefully skips if the drive is disconnected.
+- **Self-healing and pruning**: All applications auto-sync with `selfHeal` and `prune` enabled. Manual cluster changes get reverted. Deleted manifests get cleaned up. PVCs are excluded from pruning to prevent data loss.
+
+## Stack
+
+| Component | Technology |
+|-----------|-----------|
+| OS | Talos OS v1.7.5 |
+| Kubernetes | v1.30.1 (single node) |
+| GitOps | ArgoCD v3.3.0 |
+| CNI | Cilium 1.16.1 |
+| Secret management | Sealed Secrets v0.35.0 (`kubeseal`) |
+| TLS automation | cert-manager + Let's Encrypt (DNS-01) |
+| Ingress | Cilium IngressClass (LAN) + Cloudflare Tunnel (internet) |
+| Storage | Rancher `local-path-provisioner` |
