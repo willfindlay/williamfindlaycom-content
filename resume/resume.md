@@ -15,6 +15,8 @@ Cisco Systems, Inc., Kanata, ON (Remote) — 2024 – Present
 - Core contributor to the technology underpinning Cisco's Hypershield security product
 - Own and maintain mission-critical realtime application modeling subsystem in Go and eBPF, forming the foundation of Hypershield
 - Implemented and maintain system call profiling capabilities in Tetragon
+- Pioneered agent-centric documentation practices in the Tetragon team, enabling effective AI-assisted development across the engineering organization
+- Leveraged agentic coding workflows to multiply engineering productivity while steering key design and implementation decisions
 
 **Software Engineer**
 Isovalent, Inc., Kanata, ON (Remote) — 2021 – 2024
@@ -66,6 +68,7 @@ Carleton University, Ottawa, Canada — Sept. 2015 – Apr. 2020
 - **Systems Programming**: C, C++, Rust
 - **Data Science**: Pandas, Numpy, Scipy, R
 - **Research**: Applied Security, Operating System Security, Sandboxing, Intrusion Detection
+- **AI-Assisted Development**: Agentic coding workflows, custom tooling and automation, multi-agent orchestration, prompt engineering
 
 ## Languages
 
