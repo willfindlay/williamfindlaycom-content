@@ -6,53 +6,44 @@ title: "Resume"
 
 Software Engineer · Kernel Hacker · Security Researcher · BPF Developer
 
+Senior Software Engineer at Cisco with 5 years building runtime security infrastructure in Go and eBPF. Core contributor to [Tetragon](https://github.com/cilium/tetragon), the open-source CNCF eBPF security platform powering Cisco Hypershield. Published researcher with upstream contributions to the Linux kernel's BPF subsystem.
+
 ## Experience
 
-**Senior Software Engineer (Level 10)**
+**Senior Software Engineer**
 Cisco Systems, Inc., Kanata, ON (Remote) — 2024 – Present
 
-- Continued development on [Tetragon](https://github.com/cilium/tetragon) following Cisco's acquisition of Isovalent
-- Core contributor to the technology underpinning Cisco's Hypershield security product
-- Own and maintain mission-critical realtime application modeling subsystem in Go and eBPF, forming the foundation of Hypershield
-- Implemented and maintain system call profiling capabilities in Tetragon
-- Pioneered agent-centric documentation practices in the Tetragon team, enabling effective AI-assisted development across the engineering organization
-- Leveraged agentic coding workflows to multiply engineering productivity while steering key design and implementation decisions
+- Own and maintain Tetragon's real-time process lifecycle tracking subsystem in Go and eBPF, forming the foundation of Cisco Hypershield's runtime security enforcement
+- Designed and implemented system call profiling capabilities in Tetragon, using tracepoint and kprobe-based eBPF programs to model per-process syscall behavior
+- Drove technical continuity on [Tetragon](https://github.com/cilium/tetragon) through Cisco's acquisition of Isovalent, maintaining development velocity on a core CNCF security project
+- Championed responsible AI-assisted development within the enterprise engineering team, establishing agent-centric documentation standards that streamline onboarding for both human developers and AI agents
 
 **Software Engineer**
 Isovalent, Inc., Kanata, ON (Remote) — 2021 – 2024
 
-- Early member of the [Tetragon](https://github.com/cilium/tetragon) team — Isovalent's flagship runtime security and observability platform built with Go and eBPF
-- Shipped critical features for enterprise customers, including layer 7 protocol parsers in eBPF and SIEM ingestion filtering
-- Identified and helped fix bugs in the Linux kernel's BPF TCP stack
+- Joined the [Tetragon](https://github.com/cilium/tetragon) team as an early member, building Isovalent's runtime security and observability platform in Go and eBPF
+- Shipped layer 7 protocol parsers in eBPF and SIEM ingestion filtering for enterprise customers
+- Co-authored upstream patches for the Linux kernel's BPF networking stack
 - Overhauled the project's testing framework and CI pipeline
 - Mentored new engineers and helped scale the team through a period of rapid growth
 
-**Teaching Assistant, COMP4000/5012 Distributed Operating Systems**
-Carleton University, Ottawa, ON — Sept. 2021 – Dec. 2021
-
-- Assisted the professor with planning and developing course material for a 50-student mixed graduate and undergraduate seminar course
-- Created bi-weekly quizzes based on the content of research papers
-- Designed two implementation experiences for students focused around Kubernetes deployments in the cloud
-- Graded assignments, term papers, and exams
-
-**Head Teaching Assistant, COMP3000 Operating Systems**
+**Teaching Assistant, Operating Systems & Distributed Systems**
 Carleton University, Ottawa, ON — 2018 – 2021
 
-- Nominee for the [Outstanding Teaching Assistant Award](https://carleton.ca/tasupport/taawards/edc-outstanding-ta-awards/) in 2018/2019, 2019/2020, and 2020/2021
-- Ran tutorial sessions for groups of 50 students
-- Developed a [Discord bot](https://github.com/willfindlay/tabot) to manage the class Discord server during the COVID-19 pandemic
-- Developed new tutorials used each semester: concurrency, kernel memory management, eBPF, rootkits
+- Nominated three times for the [Outstanding Teaching Assistant Award](https://carleton.ca/tasupport/taawards/edc-outstanding-ta-awards/)
+- Developed course tutorials on eBPF, kernel memory management, concurrency, and rootkits
+- Led tutorials and created coursework for classes of up to 50 students
 
 ## Education
 
-**Doctor of Philosophy in Computer Science** *(withdrawn after 1 semester to pursue industry)*
+**Doctor of Philosophy in Computer Science** *(left to join the founding Tetragon team at Isovalent)*
 Carleton University, Ottawa, Canada — Sept. 2021 – Dec. 2021
 
 **Master of Computer Science**
 Carleton University, Ottawa, Canada — Sept. 2020 – Aug. 2021
 
 - CGPA: 12.00 (A+) — Accelerated Master's Program
-- Nominated for a Senate Medal for academic achievement
+- Nominated for a Senate Medal for Academic Achievement
 - Thesis: [A Practical, Flexible, and Lightweight Confinement Framework in eBPF](https://www.cisl.carleton.ca/~will/written/techreport/mcs-thesis.pdf)
 
 **B.Sc. Computer Science, Honours**
@@ -64,16 +55,12 @@ Carleton University, Ottawa, Canada — Sept. 2015 – Apr. 2020
 
 ## Skills
 
-- **Linux Kernel**: Kernel Hacking, Kernel Module Development, eBPF, XDP, bcc, libbpf
-- **Systems Programming**: C, C++, Rust
-- **Data Science**: Pandas, Numpy, Scipy, R
-- **Research**: Applied Security, Operating System Security, Sandboxing, Intrusion Detection
-- **AI-Assisted Development**: Agentic coding workflows, custom tooling and automation, multi-agent orchestration, prompt engineering
-
-## Languages
-
-- **Programming**: Rust, C, Python, Go
-- **Human**: English, French
+- **Linux Kernel**: eBPF (kprobes, tracepoints, LSM, XDP), kernel module development, libbpf, bcc
+- **Systems Programming**: Go, C, Rust, Python
+- **Security**: Runtime enforcement, process confinement, intrusion detection, syscall profiling
+- **Research**: Published at ACM CCSW, invited speaker at IBM Research and eBPF Summit
+- **AI-Assisted Development**: Claude Code power user, custom agent orchestration, prompt engineering, automated workflow design
+- **Languages**: English, French
 
 ## Research
 
@@ -81,56 +68,30 @@ Carleton University, Ottawa, Canada — Sept. 2015 – Apr. 2020
 Carleton University, Ottawa, Canada — Apr. 2019 – Aug. 2021
 
 - Member of the [CCSL/CISL](https://www.cisl.carleton.ca/) research group
-- Researching Extended BPF for runtime security implementations under the Linux kernel
+- Researched Extended BPF for runtime security within the Linux kernel
 - Co-supervised by [Dr. Anil Somayaji](https://people.scs.carleton.ca/~soma/) and [Dr. David Barrera](https://dbarrera.xyz/)
 - Designed and developed ebpH, an anomaly detection system for Linux using eBPF
   - Subject of undergraduate [Honours Thesis](https://www.cisl.carleton.ca/~will/written/coursework/undergrad-ebpH-thesis.pdf)
 - Designed and developed bpfbox, a process confinement tool for Linux using eBPF
-  - [Published at ACM CCSW'2020](https://dl.acm.org/doi/10.1145/3411495.3421358)
+  - [Published at ACM CCSW 2020](https://dl.acm.org/doi/10.1145/3411495.3421358)
 
-## Awards and Nominations
+## Awards
 
-### Accolades
-
-| Year | Type | Award |
-|------|------|-------|
-| 2021 | Nominee | Senate Medal for Academic Achievement, Carleton University |
-| 2021 | Nominee | Outstanding Teaching Assistant Award, Carleton University |
-| 2020 | Nominee | Outstanding Teaching Assistant Award, Carleton University |
-| 2019 | Nominee | Outstanding Teaching Assistant Award, Carleton University |
-| 2020 | Recipient | Dean's Honour List, Carleton University |
-| 2019 | Recipient | Dean's Honour List, Carleton University |
-
-### Scholarships
-
-| Year | Award |
-|------|-------|
-| 2020 | Domestic Entrance Masters ($2,000 CAD), Carleton University |
-| 2020–2021 | Departmental Scholarships ($6,000 CAD/year), Carleton University |
-| 2020–2021 | Research Assistantships ($6,000 CAD/year), Carleton University |
-| 2020–2021 | Teaching Assistantships ($11,000 CAD/year), Carleton University |
-| 2015–2019 | Entrance Scholarship ($2,000 CAD/year), Carleton University |
+- Nominee, Senate Medal for Academic Achievement, Carleton University (2021)
+- Three-time nominee, Outstanding Teaching Assistant Award, Carleton University (2019 – 2021)
+- Dean's Honour List, Carleton University (2019, 2020)
+- Multiple academic scholarships and research assistantships, Carleton University (2015 – 2021)
 
 ## Presentations and Invited Talks
 
 **bpfbox: Simple Precise Process Confinement with eBPF**
 Invited Talk, IBM Research — Security and Privacy — Dec. 2020
 
-- Invited guest speaker for the IBM Security and Privacy research group
-
 **bpfbox: Simple Precise Process Confinement with eBPF**
-Conference Presentation, ACM CCSW'2020 — Nov. 2020
+Conference Presentation, ACM CCSW 2020 — Nov. 2020
 
 **bpfbox: Simple Precise Process Confinement with eBPF and KRSI**
 Lightning Talk, [First Annual eBPF Summit](https://ebpf.io/summit-2020/#lightning-talks) — Oct. 2020
-
-- Invited to give a lightning talk for the inaugural eBPF summit, hosted by Cilium
-
-**bpfbox: Simple Precise Process Confinement with eBPF**
-Seminar Presentation, CCSL/CISL Seminar — Oct. 2020
-
-**Extended BPF Process Homeostasis**
-Seminar Presentation, CCSL/CISL Seminar — Apr. 2020
 
 ## Publications
 
@@ -150,19 +111,27 @@ Seminar Presentation, CCSL/CISL Seminar — Apr. 2020
 
 - Container security framework using eBPF programs and LSM hooks
 - Tech stack: Rust, libbpf-rs, eBPF
-- Subject of ongoing research and Master's Thesis
+- Subject of Master's Thesis research
 - [Source code](https://github.com/willfindlay/bpfcontain-rs)
 
 **bpfbox** — eBPF-Based Process Confinement Mechanism
 
 - First eBPF-based policy enforcement engine with a high-level policy language for process confinement
-- [Published at ACM CCSW'2020](https://dl.acm.org/doi/10.1145/3411495.3421358)
+- [Published at ACM CCSW 2020](https://dl.acm.org/doi/10.1145/3411495.3421358)
 - [Source code](https://github.com/willfindlay/bpfbox)
 
 **ebpH** — eBPF-Based Intrusion Detection System
 
 - Intrusion detection system for Linux that establishes per-executable system call profiles to detect anomalies
 - [Source code](https://github.com/willfindlay/ebpH)
+
+### Core Contributor
+
+**Tetragon** — eBPF-Based Security Observability and Runtime Enforcement (CNCF)
+
+- One of the first maintainers; core contributor since the pre-open-source phase (2021)
+- Own the real-time process lifecycle tracking and syscall profiling subsystems
+- [Source code](https://github.com/cilium/tetragon)
 
 ### Contributor
 
