@@ -79,7 +79,7 @@ Each of the three workflows lives in its own skill file. They share a common com
 
 The commit policy defines conventions shared by all three skills.
 
-```markdown collapsed="true" filename="~/.claude/COMMITTING.md"
+````markdown collapsed="true" filename="~/.claude/COMMITTING.md"
 # Git Commit Policy
 
 ## Golden Rule
@@ -138,7 +138,7 @@ The `branch-name-validator` hook enforces these conventions:
 | Backport | `backports/<user>/<version-branch>/<description>` | `backports/<user>/v2.1/fix-crash` |
 | Backup | `backup/<anything>` | `backup/pr/<user>/add-auth/1` |
 | Worktree (auto) | `worktree-*` | `worktree-abc123` (auto-generated) |
-```
+````
 
 The hook system is configured in `settings.json`, where each hook maps a lifecycle event and tool matcher to a command.
 
@@ -303,7 +303,7 @@ The PR skill orchestrates an eight-step workflow that takes uncommitted changes 
 
 The complete skill definition includes the verification sub-agent's verbatim instructions and the user confirmation flow.
 
-```markdown collapsed="true" filename="~/.claude/skills/pull-request/SKILL.md"
+````markdown collapsed="true" filename="~/.claude/skills/pull-request/SKILL.md"
 ---
 name: pull-request
 description: Commit changes and create a pull request. Use when the user asks to create a PR, open a pull request, or submit changes for review.
@@ -414,13 +414,13 @@ Perform the following steps in order (create a todo list to follow along):
 
 `gh pr merge --rebase --delete-branch` fails inside git worktrees because `--delete-branch` tries to checkout `main` locally, which is already checked out in the main worktree. Instead, merge without `--delete-branch` and clean up manually:
 
-\`\`\`bash
+```bash
 gh pr merge <number> --rebase
 git fetch origin main && git checkout --detach origin/main
 git branch -D <branch-name>
 git push origin --delete <branch-name>
-\`\`\`
 ```
+````
 
 Steps 1 through 3 use the same conventions as the commit skill. Step 4 gathers the full diff and commit history against the base branch (detected via `gh repo view --json defaultBranchRef`), then drafts the PR body as plain prose paragraphs. The drafting guidelines prohibit markdown headings, rigid sections like "Summary" or "Test plan", and bullet-driven descriptions. Testing should be described inline as part of the narrative, not separated into its own section. The tone is factual; no editorializing.
 
@@ -446,7 +446,7 @@ Step 7 happens after user approval of the PR body but before anything touches th
 
 The reword-commits skill is its own standalone workflow. It audits each commit's message against its diff, drafts replacements, presents old-vs-new for user approval, then executes an interactive rebase using a custom `GIT_SEQUENCE_EDITOR` script. The script is a small Python program that takes a list of SHAs and rewrites the rebase todo list, changing `pick` to `edit` only for the targeted commits. A backup branch is created before the rebase, and a tree-level diff afterwards confirms the code is unchanged.
 
-```markdown collapsed="true" filename="~/.claude/skills/reword-commits/SKILL.md"
+````markdown collapsed="true" filename="~/.claude/skills/reword-commits/SKILL.md"
 ---
 name: reword-commits
 description: Reword commit messages to accurately reflect their content. Use when commit messages are stale, inaccurate, or need updating after squashing/rebasing.
@@ -491,7 +491,7 @@ Reword commit messages on the current branch so each message accurately describe
    - `git log --oneline <base>..HEAD` should show the updated titles
 
 8. **Clean up.** Do NOT force push unless the user explicitly asks. Do NOT delete the backup branch, let the user decide.
-```
+````
 
 The `GIT_SEQUENCE_EDITOR` script it uses to drive the rebase:
 
@@ -545,7 +545,7 @@ The code review skill is the most complex of the three. It reviews a pull reques
 
 The full skill definition runs through all nine steps.
 
-```markdown collapsed="true" filename="~/.claude/skills/code-review/SKILL.md"
+````markdown collapsed="true" filename="~/.claude/skills/code-review/SKILL.md"
 ---
 name: code-review
 description: Review a pull request for code quality, bugs, SOLID violations, anti-patterns, and project instruction compliance (CLAUDE.md, CLAUDE.local.md, AGENTS.md). Resolves target as explicit PR number or auto-detect PR for current branch. Presents findings as prose and asks for confirmation before posting a GitHub review. Use when the user asks for a code review, wants feedback, or asks to review a PR.
@@ -574,20 +574,20 @@ Run in parallel:
 Derive merge base: `git merge-base origin/<baseRefName> HEAD`
 
 Then gather the PR commit list (this becomes the **allowlist** for commit attribution):
-\`\`\`bash
+```bash
 git log --format='%h %H %s' $merge_base..HEAD
-\`\`\`
+```
 Store the short SHA, full SHA, and subject for each commit. Any issue reported in step 4 must trace back to one of these commits.
 
 ## Step 3: Authorship check
 
 Determine whether GitHub posting is available:
 
-\`\`\`bash
+```bash
 merge_base=$(git merge-base origin/<baseRefName> HEAD)
 authors=$(git log "$merge_base"..HEAD --format=%ae | sort -u)
 current_user=$(git config --get user.email)
-\`\`\`
+```
 
 - Single author matching `current_user` -> **sole author** (no GitHub posting; present findings in terminal only)
 - Otherwise -> **not sole author** (GitHub posting available in step 9)
@@ -640,9 +640,9 @@ Remove all issues with a confidence score less than 70. After filtering, you may
 ## Step 8: Deduplication
 
 Fetch existing review comments on the PR:
-\`\`\`bash
+```bash
 gh api repos/{owner}/{repo}/pulls/{number}/comments
-\`\`\`
+```
 
 For each surviving issue from step 7, check whether an existing comment already covers the same concern. A match requires all of:
 - Same file
@@ -695,16 +695,16 @@ For each inline comment, verify the line number against the actual diff:
 
 **Auto-react to duplicates:**
 Before posting the review, add +1 reactions to existing comments matched in the dedup step (step 8):
-\`\`\`bash
+```bash
 gh api repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions -f content='+1'
-\`\`\`
+```
 Use numeric REST API comment IDs (not GraphQL node IDs).
 
 **Construct and post the review:**
 
 Write the full JSON payload to a temp file and post via `gh api`:
 
-\`\`\`bash
+```bash
 cat > /tmp/review.json <<'REVIEW_EOF'
 {
   "event": "COMMENT",
@@ -715,7 +715,7 @@ cat > /tmp/review.json <<'REVIEW_EOF'
 }
 REVIEW_EOF
 gh api "repos/{owner}/{repo}/pulls/{number}/reviews" --input /tmp/review.json
-\`\`\`
+```
 
 **Comment fields:**
 - `path`: file path relative to repo root
@@ -758,7 +758,7 @@ Exclude these categories from findings:
 - Each comment should read like it was written by a human reviewer.
 
 Never attempt or offer to commit changes under any circumstances.
-```
+````
 
 ### Multi-Agent Architecture
 
@@ -1614,7 +1614,7 @@ Two additional skills handle the parts of git history management that the main t
 
 The fixup skill creates fixup commits and autosquashes them into their targets. It verifies the target commit by running `git log --oneline -- <file>` rather than guessing from descriptions, creates the fixup with `--fixup=<sha>`, then runs a non-interactive autosquash rebase using `GIT_SEQUENCE_EDITOR=true`. After squashing, it checks whether the target commit's message is now stale (because the fixup changed the nature of the commit) and suggests `/reword-commits` if so.
 
-```markdown collapsed="true" filename="~/.claude/skills/fixup/SKILL.md"
+````markdown collapsed="true" filename="~/.claude/skills/fixup/SKILL.md"
 ---
 name: fixup
 description: "Create fixup commits and autosquash them into their target commits via interactive rebase. Use when the user asks to fixup, squash into, or amend a previous commit (not the most recent one)."
@@ -1654,11 +1654,11 @@ Create fixup commits for staged/unstaged changes and autosquash them into the co
 - Always rebase onto the merge base, not onto the base branch directly -- rebasing onto the branch can fail if it has parallel copies of the same commits
 - If the working tree has unrelated changes, stash them first and pop after
 - Do NOT force push -- leave that to the user unless they explicitly ask
-```
+````
 
 The commit surgery skill handles more complex history restructuring: squashing groups of commits, reordering, dropping changes from specific commits, and fixing cross-commit regressions. It uses a set of bundled Python scripts that act as `GIT_SEQUENCE_EDITOR` implementations, each handling a different rebase operation (reorder and squash, custom squash messages, marking commits for editing). The skill operates in phases: analyze, fix code issues that will surface after squashing, rewrite history, fix regressions from reordering, and verify against a backup branch.
 
-```markdown collapsed="true" filename="~/.claude/skills/commit-surgery/SKILL.md"
+````markdown collapsed="true" filename="~/.claude/skills/commit-surgery/SKILL.md"
 ---
 name: commit-surgery
 description: Squash, reorder, and clean up commit history on a branch. Handles interleaved temporary/DONTMERGE commits, interface mismatches from split commits, and cross-commit regressions. Use when the user needs to restructure commit history before merge.
@@ -1791,7 +1791,7 @@ To remove specific file changes from a commit:
 ## Do NOT Force Push
 
 Unless the user explicitly asks, do not force push after surgery. Show the result and let them decide.
-```
+````
 
 The bundled `GIT_SEQUENCE_EDITOR` scripts handle the rebase operations.
 
