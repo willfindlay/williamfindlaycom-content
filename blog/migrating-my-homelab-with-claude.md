@@ -53,7 +53,7 @@ I had a pre-commit hook that ran Prettier on staged files. Claude, following goo
 
 The fix was a one-line revert, but the lesson mattered. We added a convention to `CLAUDE.md`: never format YAML files with Prettier or any other formatter. The pre-commit hook got a `SKIP_FORMAT_CHECK=1` escape hatch for YAML files.
 
-What's worth noting is the feedback loop. Claude broke something, I noticed during review, we documented the constraint, and it never recurred. It's the same dynamic you'd have onboarding a new team member to a project with non-obvious conventions. The difference is that the "onboarding doc" is also the enforcement mechanism; Claude reads `CLAUDE.md` at the start of every session, so documented gotchas are always in context.
+The feedback loop is what mattered. Claude broke something, I noticed during review, we documented the constraint, and it never recurred. It's the same dynamic you'd have onboarding a new team member to a project with non-obvious conventions. The difference is that the "onboarding doc" is also the enforcement mechanism; Claude reads `CLAUDE.md` at the start of every session, so documented gotchas are always in context.
 
 ## Debugging Certificate Renewal
 
