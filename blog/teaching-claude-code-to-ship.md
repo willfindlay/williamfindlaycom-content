@@ -21,7 +21,7 @@ A skill is not a prompt template. It is a step-by-step procedure with branching 
 
 The top-level configuration file sets global rules and composes the rest via `@` imports. It establishes writing conventions (no em-dashes, no AI filler phrases, prose over bullets) and a memory policy that tells Claude where to persist lessons across sessions.
 
-```markdown collapsed="true" filename="~/.claude/CLAUDE.md"
+```markdown {collapsed="true" filename="~/.claude/CLAUDE.md"}
 # Claude Code Context
 
 @COMMITTING.md
@@ -55,7 +55,7 @@ When saving insights to memory at session end:
 
 A principles document sets baseline expectations for how Claude approaches development.
 
-```markdown collapsed="true" filename="~/.claude/PRINCIPLES.md"
+```markdown {collapsed="true" filename="~/.claude/PRINCIPLES.md"}
 # Core Development Principles
 
 1. **Reuse Before Create**: Always search for existing implementations, patterns, utilities, and abstractions in the codebase before creating new ones
@@ -79,7 +79,7 @@ Each of the three workflows lives in its own skill file. They share a common com
 
 The commit policy defines conventions shared by all three skills.
 
-````markdown collapsed="true" filename="~/.claude/COMMITTING.md"
+````markdown {collapsed="true" filename="~/.claude/COMMITTING.md"}
 # Git Commit Policy
 
 ## Golden Rule
@@ -142,7 +142,7 @@ The `branch-name-validator` hook enforces these conventions:
 
 The hook system is configured in `settings.json`, where each hook maps a lifecycle event and tool matcher to a command.
 
-```json collapsed="true" filename="~/.claude/settings.json"
+```json {collapsed="true" filename="~/.claude/settings.json"}
 {
   "permissions": {
     "allow": [
@@ -234,7 +234,7 @@ The hook system is configured in `settings.json`, where each hook maps a lifecyc
 
 The commit skill is the simplest of the three and serves as a building block for the others. Its full definition is short: check for changes, then stage and commit following the policy.
 
-```markdown collapsed="true" filename="~/.claude/skills/commit/SKILL.md"
+```markdown {collapsed="true" filename="~/.claude/skills/commit/SKILL.md"}
 ---
 name: commit
 description: Commit changes. Use when the user asks to commit, save changes, or stage and commit code modifications.
@@ -264,7 +264,7 @@ The commit skill also detects chezmoi contexts automatically. A bundled shell sc
 
 The detection script is straightforward.
 
-```bash collapsed="true" filename="~/.claude/skills/commit/scripts/detect-chezmoi.sh"
+```bash {collapsed="true" filename="~/.claude/skills/commit/scripts/detect-chezmoi.sh"}
 #!/usr/bin/env bash
 # Detect if CWD is in a chezmoi context:
 #   - CWD is inside the chezmoi source directory, OR
@@ -303,7 +303,7 @@ The PR skill orchestrates an eight-step workflow that takes uncommitted changes 
 
 The complete skill definition includes the verification sub-agent's verbatim instructions and the user confirmation flow.
 
-````markdown collapsed="true" filename="~/.claude/skills/pull-request/SKILL.md"
+````markdown {collapsed="true" filename="~/.claude/skills/pull-request/SKILL.md"}
 ---
 name: pull-request
 description: Commit changes and create a pull request. Use when the user asks to create a PR, open a pull request, or submit changes for review.
@@ -446,7 +446,7 @@ Step 7 happens after user approval of the PR body but before anything touches th
 
 The reword-commits skill is its own standalone workflow. It audits each commit's message against its diff, drafts replacements, presents old-vs-new for user approval, then executes an interactive rebase using a custom `GIT_SEQUENCE_EDITOR` script. The script is a small Python program that takes a list of SHAs and rewrites the rebase todo list, changing `pick` to `edit` only for the targeted commits. A backup branch is created before the rebase, and a tree-level diff afterwards confirms the code is unchanged.
 
-````markdown collapsed="true" filename="~/.claude/skills/reword-commits/SKILL.md"
+````markdown {collapsed="true" filename="~/.claude/skills/reword-commits/SKILL.md"}
 ---
 name: reword-commits
 description: Reword commit messages to accurately reflect their content. Use when commit messages are stale, inaccurate, or need updating after squashing/rebasing.
@@ -495,7 +495,7 @@ Reword commit messages on the current branch so each message accurately describe
 
 The `GIT_SEQUENCE_EDITOR` script it uses to drive the rebase:
 
-```python collapsed="true" filename="~/.claude/skills/reword-commits/scripts/reword-todo.py"
+```python {collapsed="true" filename="~/.claude/skills/reword-commits/scripts/reword-todo.py"}
 #!/usr/bin/env python3
 """GIT_SEQUENCE_EDITOR script: mark commits for rewording in a rebase todo.
 
@@ -545,7 +545,7 @@ The code review skill is the most complex of the three. It reviews a pull reques
 
 The full skill definition runs through all nine steps.
 
-````markdown collapsed="true" filename="~/.claude/skills/code-review/SKILL.md"
+````markdown {collapsed="true" filename="~/.claude/skills/code-review/SKILL.md"}
 ---
 name: code-review
 description: Review a pull request for code quality, bugs, SOLID violations, anti-patterns, and project instruction compliance (CLAUDE.md, CLAUDE.local.md, AGENTS.md). Resolves target as explicit PR number or auto-detect PR for current branch. Presents findings as prose and asks for confirmation before posting a GitHub review. Use when the user asks for a code review, wants feedback, or asks to review a PR.
@@ -779,7 +779,7 @@ Before confidence scoring, a hard structural filter runs. A shell script receive
 
 The verification script is a `jq` pipeline.
 
-```bash collapsed="true" filename="~/.claude/skills/code-review/scripts/verify-commits.sh"
+```bash {collapsed="true" filename="~/.claude/skills/code-review/scripts/verify-commits.sh"}
 #!/usr/bin/env bash
 # Verify that issues reported by review agents reference valid PR commits.
 #
@@ -877,7 +877,7 @@ Deny rules (also in the PermissionRequest path) block context-specific bad pract
 
 The real implementation is a ~2700-line Python script that handles token parsing, command splitting, and edge cases across git, gh, kubectl, helm, chezmoi, and dozens of other tools. It will be open sourced at a later date. The skeleton below shows the architectural pattern: data-driven rule tables fed into a four-tier dispatcher.
 
-```python collapsed="true" filename="~/.claude/hooks/permissions.py"
+```python {collapsed="true" filename="~/.claude/hooks/permissions.py"}
 #!/usr/bin/env python3
 """permissions.py - Bash command permission hook (PreToolUse + PermissionRequest)
 
@@ -1082,7 +1082,7 @@ if __name__ == "__main__":
 
 A branch name validator intercepts `git checkout -b`, `git switch -c`, and `git branch` commands, extracting the branch name and checking it against a regex of allowed patterns (`pr/<user>/*`, `dontmerge/<user>/*`, `backports/<user>/*`, `backup/*`, `worktree-*`). Non-conforming names trigger a warning with the convention table, not a hard block.
 
-```python collapsed="true" filename="~/.claude/hooks/branch-name-validator.py"
+```python {collapsed="true" filename="~/.claude/hooks/branch-name-validator.py"}
 #!/usr/bin/env python3
 """branch-name-validator.py -- PreToolUse hook (matcher: Bash)
 
@@ -1303,7 +1303,7 @@ if __name__ == "__main__":
 
 A formatting gate intercepts `git commit` commands and denies the first attempt, telling Claude to format staged files per the project's formatting standards before retrying. The gate uses a session-scoped temp file to track state: first commit attempt is denied, second attempt passes through. A `SKIP_FORMAT_CHECK=1` prefix bypasses the gate for cases where formatting is unnecessary.
 
-```bash collapsed="true" filename="~/.claude/hooks/git-guardrails.sh"
+```bash {collapsed="true" filename="~/.claude/hooks/git-guardrails.sh"}
 #!/usr/bin/env bash
 # git-guardrails.sh -- PreToolUse hook (matcher: Bash)
 # Formatting gate: deny first commit attempt so Claude formats first, allow retry.
@@ -1363,7 +1363,7 @@ fi
 
 A writing style guard intercepts all Edit, Write, and Bash tool calls and denies any that contain em-dashes or en-dashes. It scans for both the literal Unicode characters and escape sequences like `\u2014` or `\u2013` that would produce them. This enforces a writing convention across all output: prose, comments, commits, and PR descriptions. The hook supports a single-use bypass mechanism for legitimate uses: if a session-scoped marker file exists, the hook consumes it and allows the operation through.
 
-```python collapsed="true" filename="~/.claude/hooks/writing-style-guard.py"
+```python {collapsed="true" filename="~/.claude/hooks/writing-style-guard.py"}
 #!/usr/bin/env python3
 """writing-style-guard.py -- PreToolUse hook (matcher: Edit|Write|Bash)
 
@@ -1528,7 +1528,7 @@ if __name__ == "__main__":
 
 A stop hook fires at session end and prompts for cleanup tasks. If the session is inside a git worktree with an auto-generated branch name (like `worktree-fancy-beaming-comet`), it prompts Claude to rename the branch to a convention-compliant name before ending. It also prompts for memory reflection if the session involved significant tool usage.
 
-```bash collapsed="true" filename="~/.claude/hooks/pre-stop-checks.sh"
+```bash {collapsed="true" filename="~/.claude/hooks/pre-stop-checks.sh"}
 #!/usr/bin/env bash
 # pre-stop-checks.sh -- Stop hook
 # Memory reflection -- if the session had significant tool usage.
@@ -1614,7 +1614,7 @@ Two additional skills handle the parts of git history management that the main t
 
 The fixup skill creates fixup commits and autosquashes them into their targets. It verifies the target commit by running `git log --oneline -- <file>` rather than guessing from descriptions, creates the fixup with `--fixup=<sha>`, then runs a non-interactive autosquash rebase using `GIT_SEQUENCE_EDITOR=true`. After squashing, it checks whether the target commit's message is now stale (because the fixup changed the nature of the commit) and suggests `/reword-commits` if so.
 
-````markdown collapsed="true" filename="~/.claude/skills/fixup/SKILL.md"
+````markdown {collapsed="true" filename="~/.claude/skills/fixup/SKILL.md"}
 ---
 name: fixup
 description: "Create fixup commits and autosquash them into their target commits via interactive rebase. Use when the user asks to fixup, squash into, or amend a previous commit (not the most recent one)."
@@ -1658,7 +1658,7 @@ Create fixup commits for staged/unstaged changes and autosquash them into the co
 
 The commit surgery skill handles more complex history restructuring: squashing groups of commits, reordering, dropping changes from specific commits, and fixing cross-commit regressions. It uses a set of bundled Python scripts that act as `GIT_SEQUENCE_EDITOR` implementations, each handling a different rebase operation (reorder and squash, custom squash messages, marking commits for editing). The skill operates in phases: analyze, fix code issues that will surface after squashing, rewrite history, fix regressions from reordering, and verify against a backup branch.
 
-````markdown collapsed="true" filename="~/.claude/skills/commit-surgery/SKILL.md"
+````markdown {collapsed="true" filename="~/.claude/skills/commit-surgery/SKILL.md"}
 ---
 name: commit-surgery
 description: Squash, reorder, and clean up commit history on a branch. Handles interleaved temporary/DONTMERGE commits, interface mismatches from split commits, and cross-commit regressions. Use when the user needs to restructure commit history before merge.
@@ -1795,7 +1795,7 @@ Unless the user explicitly asks, do not force push after surgery. Show the resul
 
 The bundled `GIT_SEQUENCE_EDITOR` scripts handle the rebase operations.
 
-```python collapsed="true" filename="~/.claude/skills/commit-surgery/scripts/reorder-todo.py"
+```python {collapsed="true" filename="~/.claude/skills/commit-surgery/scripts/reorder-todo.py"}
 #!/usr/bin/env python3
 """GIT_SEQUENCE_EDITOR script: reorder and squash commits in a rebase todo.
 
@@ -1869,7 +1869,7 @@ if __name__ == "__main__":
     main()
 ```
 
-```python collapsed="true" filename="~/.claude/skills/commit-surgery/scripts/squash-msg.py"
+```python {collapsed="true" filename="~/.claude/skills/commit-surgery/scripts/squash-msg.py"}
 #!/usr/bin/env python3
 """GIT_EDITOR script: replace the squash commit message.
 
@@ -1900,7 +1900,7 @@ if __name__ == "__main__":
     main()
 ```
 
-```python collapsed="true" filename="~/.claude/skills/commit-surgery/scripts/edit-commit.py"
+```python {collapsed="true" filename="~/.claude/skills/commit-surgery/scripts/edit-commit.py"}
 #!/usr/bin/env python3
 """GIT_SEQUENCE_EDITOR script: mark specific commits as 'edit' in a rebase todo.
 
@@ -1948,7 +1948,7 @@ The system produces commits, reviews, and PRs that are consistent with each othe
 
 The system also builds institutional knowledge. A global memory file accumulates cross-project lessons (git workflow edge cases, tool-specific gotchas, debugging insights) that persist across sessions.
 
-```markdown collapsed="true" filename="~/.claude/MEMORIES.md"
+```markdown {collapsed="true" filename="~/.claude/MEMORIES.md"}
 # Global Memories
 
 Cross-project lessons that apply to ANY repository. Do NOT put project-specific insights here -- those go in the project's auto memory directory. When in doubt, ask the user before adding entries.
