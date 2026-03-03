@@ -1,0 +1,9 @@
+# Redirect map for williamfindlay.com
+#
+# Each entry has:
+#   from: source path (required)
+#   to:   target path or URL (required)
+#   code: HTTP status code, 300-399 (optional, defaults to 301)
+
+- from: /index
+  to: /
